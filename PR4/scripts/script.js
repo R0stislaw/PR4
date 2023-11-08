@@ -12,6 +12,8 @@ function clearWatch() {
     navigator.geolocation.clearWatch(watchId);
     watchId = null;
   }
+  marker = null;
+  infowindow = null;
 }
 function getMyLocation() {
   if (navigator.geolocation) {
@@ -127,4 +129,3 @@ async function initMap() {
     zoom: 8,
   });
 }
-
