@@ -1,7 +1,11 @@
-
+const findButton = document.querySelector('input[value="Find"]')
 let marker;
 let infowindow;
 let markers = [];
+let time = new Date();
+let hours = timeFormat(time.getHours());
+let minutes = timeFormat(time.getMinutes());
+let seconds = timeFormat(time.getSeconds());
 var clearWatchButton = document.getElementById("clearWatch");
 document.addEventListener("DOMContentLoaded", getMyLocation);
 initMap();
@@ -54,10 +58,16 @@ function displayLocation(position) {
   var watchButton = document.getElementById("watch");
   watchButton.addEventListener("click",function(){
   watchId = navigator.geolocation.watchPosition(displayLocation, displayError);
-  
   setMarker(latitude,longitude);  
   })
-  
+  findButton.addEventListener("click", function() {
+    let findByLat = document.getElementById("findByLat");
+    let findByLong = document.getElementById("findByLong");
+    if(findByLat.value && findByLong.value){
+        setMarker(parseInt(latitude),parseInt(longitude))
+        
+    }
+    });
 }
 
 function setMarker(latitude, longitude) {
@@ -73,7 +83,7 @@ function setMarker(latitude, longitude) {
   });
 
   const infowindow = new google.maps.InfoWindow({
-    content: `Ваше місцезнаходження та координати ${latitude}, ${longitude}`
+    content: `Ваше місцезнаходження та координати ${latitude}, ${longitude}, Час нахуй: ${hours}:${minutes}:${seconds}`
   });
 
   marker.addListener("mouseover", function() {
@@ -140,4 +150,11 @@ async function initMap() {
     center: { lat: 48.94314364908576, lng: 24.73367598672833 },
     zoom: 8,
   });
+}
+function timeFormat(number) {
+  if (number < 10) {
+      return "0" + number;
+  } else {
+      return number;
+  }
 }
