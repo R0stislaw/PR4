@@ -1,7 +1,8 @@
 
 let marker;
 let infowindow;
-
+let markers = [];
+var clearWatchButton = document.getElementById("clearWatch");
 document.addEventListener("DOMContentLoaded", getMyLocation);
 initMap();
 
@@ -14,18 +15,29 @@ function clearWatch() {
   }
   marker = null;
   infowindow = null;
+  deleteMarkers()
 }
+
+function setMapOnAll(map) {
+  for (let i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+    console.log(markers[i].setMap(map))
+  }
+}
+function deleteMarkers() {
+  setMapOnAll(null);
+  markers = [];
+}
+
 function getMyLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(displayLocation, displayError);
-    var clearWatchButton = document.getElementById("clearWatch");
-    clearWatchButton.onclick = clearWatch;
-    clearWatchButton.addEventListener("click", clearWatch);
   } else {
     alert("Oops, no geolocation support");
   }
 
 }
+clearWatchButton.addEventListener("click", clearWatch);
 const ourCoords = {
   latitude: 48.94314364908576,
   longitude: 24.73367598672833,
@@ -70,14 +82,14 @@ function setMarker(latitude, longitude) {
   marker.addListener("mouseout", function() {
     infowindow.close();
   });
+  markers.push(marker);
 
-
-
-  map.addListener("center_changed", function() {
-  window.setTimeout(function() {
-    map.panTo(marker.getPosition());
-  }, 3000);
-});
+// центрує мітку на екрані
+//   map.addListener("center_changed", function() {
+//   window.setTimeout(function() {
+//     map.panTo(marker.getPosition());
+//   }, 3000);
+// });
 
   marker.addListener("click", function() {
     map.setZoom(16);
